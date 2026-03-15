@@ -1,0 +1,65 @@
+name: 🚀 Auto Deploy Versify
+
+on:
+  push:
+    branches:
+      - main
+ 
+jobs: 
+  deploy:
+    name: Deploy to VPS
+    runs-on: ubuntu-latest
+    environment: "Deploy to VPS"
+  
+    steps:
+      - name: 🔌 SSH & Deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: versify
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "🚀 VERSIFY DEPLOY STARTED"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+            echo "📦 Pulling latest code..."
+            cd /home/versify/poetic/
+            git stash push --keep-index
+            git pull origin main 2>&1 && echo "✅ Pull ok" || echo "❌ Pull fallito"
+
+            echo ""
+            echo "📁 Contenuto cartella:"
+            ls -la
+
+            echo ""
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "🔧 FRONTEND"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            cd /home/versify/poetic/frontend/versifier/
+            echo "📍 Path: $(pwd)"
+            /usr/local/bin/bun install 2>&1 && echo "✅ Install ok" || echo "❌ Install fallito"
+            /usr/local/bin/bun run build 2>&1 && echo "✅ Build ok" || echo "❌ Build fallita"
+
+            echo ""
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "🔧 BACKEND"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            cd /home/versify/poetic/backend/poetic-api/
+            echo "📍 Path: $(pwd)"
+            /usr/local/bin/bun install 2>&1 && echo "✅ Install ok" || echo "❌ Install fallito"
+
+            echo ""
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "🔄 RESTART SERVICES"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            sudo systemctl daemon-reload && echo "✅ Daemon reload ok"
+            sudo systemctl reload nginx && echo "✅ Nginx ok" || echo "❌ Nginx fallito"
+            sudo systemctl restart versify-api && echo "✅ API ok" || echo "❌ API fallita"
+            sudo systemctl restart versify-frontend && echo "✅ Frontend ok" || echo "❌ Frontend fallito"
+
+            echo "" 
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "✅ VERSIFY DEPLOYED 🚀"
+            echo "siamo in alto fratello 💪"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

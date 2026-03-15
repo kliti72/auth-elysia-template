@@ -1,0 +1,37 @@
+# === DATABASE ===
+backend/poetic-api/app.db
+backend/poetic-api/config/database/
+
+# === DEPENDENCIES ===
+node_modules/
+.pnp
+.pnp.js
+
+# === ENV & SECRETS ===
+backend/poetic-api/.env
+.env
+.env.local
+.env.*.local
+
+# === LOGS ===
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# === BUILD OUTPUT ===
+dist/
+build/
+.next/
+out/
+
+# === OS STUFF ===
+.DS_Store
+Thumbs.db
+
+# === EDITOR ===
+.vscode/
+.idea/
+*.swp
+*.swo

@@ -1,0 +1,40 @@
+{
+  "name": "project-backend",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch index.ts",
+    "studio": "bunx drizzle-kit studio",
+    "push": "bunx drizzle-kit push",
+    "migrate:role": "bun run scripts/migrate-add-role.ts",
+    "migrate:collectionView": "bun run scripts/migrate-add-collection-views.ts",
+    "migrate:posts": "bun run scripts/migrate-add-posts.ts",
+    "blog:generate": "bun run scripts/blog-gen/generate.ts",
+    "blog:generate:all": "bun run scripts/blog-gen/generate.ts --all",
+    "blog:validate": "bun run scripts/blog-gen/validate.ts",
+    "blog:seed": "bun run scripts/blog-gen/seed.ts",
+    "blog:seed:dry": "bun run scripts/blog-gen/seed.ts --dry",
+    "blog:pipeline": "bun run blog:generate && bun run blog:validate && bun run blog:seed"
+  },
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/nodemailer": "^7.0.11",
+    "drizzle-kit": "^0.31.9"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@elysiajs/cors": "^1.4.1",
+    "@libsql/client": "^0.17.0",
+    "arctic": "^3.7.0",
+    "argon2": "^0.44.0",
+    "better-sqlite3": "^12.6.2",
+    "drizzle-orm": "^0.45.1",
+    "elysia": "latest",
+    "elysia-oauth2": "^2.1.0",
+    "jsonrepair": "^3.13.3",
+    "nodemailer": "^8.0.2"
+  }
+}
