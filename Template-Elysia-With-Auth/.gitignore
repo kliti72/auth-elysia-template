@@ -2,6 +2,8 @@
 project-backend/app.db
 project-backend/config/database/
 project-backend/config/database/
+project-backend/config/keys/
+project-backend/config/keys
 
 # === DEPENDENCIES ===
 node_modules/
