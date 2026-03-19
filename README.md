@@ -185,6 +185,7 @@ NODE_ENV=development
 PORT=3000
 DB_PATH=./config/database/app.db
 
+// or add keys on /config/keys/google_key.json (change this)
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
 GOOGLE_REDIRECT_URI=http://localhost:3000/auth/google/callback
