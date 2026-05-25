@@ -1,10 +1,8 @@
-// index.ts
-// ⚠️  Non modificare questo file — usa app/routes.ts per registrare le route
 import { Elysia } from 'elysia'
 import { cors } from '@elysiajs/cors'
-import { loadRoutes } from './src/core/loader'
+import { loadRoutes } from './app/config/loader'
 import { routes } from './app/routes'
-import { env } from './app/environment'
+import { CONFIG } from './app/config/env'
 
 const app = new Elysia()
   .use(cors({
@@ -17,12 +15,6 @@ const app = new Elysia()
 loadRoutes(app, routes)
 
 app.listen({
-  port: env.server.port,
-  hostname: env.server.hostname,
+  port: CONFIG.server.port,
+  hostname: CONFIG.server.hostname,
 })
-
-console.log(
-  `\x1b[32m✓\x1b[0m server online  ` +
-  `\x1b[36mhttp://${app.server?.hostname}:${app.server?.port}\x1b[0m  ` +
-  `\x1b[90m[${env.isProd ? 'production' : 'development'}]\x1b[0m`
-)

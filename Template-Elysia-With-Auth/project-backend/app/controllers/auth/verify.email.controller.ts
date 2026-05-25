@@ -4,9 +4,8 @@ import { magicLinksService } from '../../services/auth/magic.service'
 import { sessionsService } from '../../services/auth/sessions.service'
 import { usersService } from '../../services/auth/users.service'
 
-export const VerifyEmailController = new Elysia({ prefix: '/auth/email' })
+export const verifyEmailController = new Elysia({ prefix: '/auth/email' })
 
-  // Manda email di verifica — utente già loggato
   .post('/send-verification', async ({ cookie, set }) => {
     const accessToken = cookie.sessionAccessToken.value
     if (!accessToken) { set.status = 401; return { error: 'Non autenticato' } }
@@ -25,7 +24,6 @@ export const VerifyEmailController = new Elysia({ prefix: '/auth/email' })
     cookie: t.Cookie({ sessionAccessToken: t.String() })
   })
 
-  // Verifica token dal link nell'email
   .get('/verify', async ({ query, set }) => {
     const { token } = query
     if (!token) { set.status = 400; return { error: 'Token mancante' } }

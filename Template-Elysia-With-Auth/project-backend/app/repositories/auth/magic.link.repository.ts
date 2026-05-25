@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm'
-import { magicLinks } from '../../../config/schema'
-import { db } from '../../../config/database'
+import { magicLinks } from '../../../database/schema'
+import { db } from '../../../database/database'
 import type { CreateMagiLinkDto, MagicLink } from '../../types/auth/magic.type'
 
 export const magicLinksRepository = {

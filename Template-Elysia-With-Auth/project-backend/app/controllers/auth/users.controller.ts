@@ -8,7 +8,6 @@ export const usersController = new Elysia({ prefix: '/users' })
     return usersService.getAll()
   })
 
-
   .get('/:id', ({ params }) => {
     return usersService.getById(Number(params.id))
   }, {

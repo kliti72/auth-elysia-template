@@ -1,31 +1,26 @@
-// src/routes.ts
-// ✅ Questo è l'unico file da modificare per gestire le route
-import type { RouteConfig } from '../src/core/loader'
+import type { RouteConfig } from '../app/config/loader'
 
 import { googleAuthController } from './controllers/auth/google.auth.controller'
-
 import { usersController } from './controllers/auth/users.controller'
-
 import { sessionsController } from './controllers/auth/sessions.controller'
-import { VerifyEmailController } from './controllers/auth/verify.email.controller'
-import { MagicAuthController } from './controllers/auth/magic.auth.controller'
-import { authMiddleware } from './middleware/auth.middleware'
-import { adminController } from './controllers/auth/admin.controller'
+import { verifyEmailController } from './controllers/auth/verify.email.controller'
+import { magicAuthController } from './controllers/auth/magic.auth.controller'
+import { adminController } from './controllers/auth/_admin.controller'
 
 export const routes: RouteConfig[] = [
   {
-    controller: VerifyEmailController,
+    controller: verifyEmailController,
     enabled: true,
     middleware: [],
   },
   {
-    controller: MagicAuthController,
+    controller: magicAuthController,
     enabled: true,
     middleware: [],
   },
   {
     controller: googleAuthController,
-    enabled: true,
+    enabled: false,
     middleware: [],
   },
   {
@@ -33,13 +28,13 @@ export const routes: RouteConfig[] = [
     enabled: true,
     middleware: [],
   },
-    {
-    controller: adminController,
-    enabled: true,
-    middleware: [authMiddleware],
-  },
   {
     controller: usersController,
+    enabled: true,
+    middleware: [],
+  },
+  {
+    controller: adminController,
     enabled: true,
     middleware: [],
   },

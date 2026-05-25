@@ -1,10 +1,11 @@
 import { defineConfig } from 'drizzle-kit'
+import { CONFIG } from './app/config/env'
 
 export default defineConfig({
-  schema: './config/schema.ts',
+  schema: CONFIG.database.schema,
   out: './drizzle',
   dialect: 'sqlite',
   dbCredentials: {
-    url: process.env.DB_PATH ?? './config/database/app.db',
+    url: CONFIG.database.path,
   },
 })

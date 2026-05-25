@@ -1,10 +1,9 @@
-// config/db.ts
 import { drizzle } from 'drizzle-orm/bun-sqlite'
 import { Database } from 'bun:sqlite'
 import * as schema from './schema'
-import { env } from '../app/environment'
+import { CONFIG } from '../app/config/env'
 
-const sqlite = new Database(env.db.path, { create: true })
+const sqlite = new Database(CONFIG.database.path, { create: true })
 
 sqlite.run('PRAGMA journal_mode = WAL')
 sqlite.run('PRAGMA foreign_keys = ON')

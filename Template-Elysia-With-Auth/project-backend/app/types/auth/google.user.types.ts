@@ -1,5 +1,9 @@
 import type { InferSelectModel, InferInsertModel } from 'drizzle-orm'
-import { users } from '../../../config/schema'
+import { users } from '../../../database/schema'
+
+export type Users = InferSelectModel<typeof users>
+export type CreateGoogleuserDto = InferInsertModel<typeof users>
+
 
 export interface GoogleUserRaw {
   id: number,
@@ -13,9 +17,6 @@ export interface GoogleUserRaw {
   picture: string
   local: string
 }
-
-export type Users = InferSelectModel<typeof users>
-export type CreateGoogleuserDto = InferInsertModel<typeof users>
 
 export function fromGoogleResponse(raw: GoogleUserRaw): Omit<Users, 'id' | 'createdAt' | 'password'> {
   return {

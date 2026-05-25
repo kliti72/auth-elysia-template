@@ -1,45 +1,41 @@
-import { db } from '../../../config/database'
-import { users } from '../../../config/schema'
+import { db } from '../../../database/database'
+import { users } from '../../../database/schema'
 import type { Users, CreateUsersDto } from '../../types/auth/users.types'
-import { eq, desc, and, sql } from 'drizzle-orm'
-export function findAll(): Users[] {
-  return db.select().from(users).orderBy(desc(users.createdAt)).all()
-}
+import { eq, desc, } from 'drizzle-orm'
 
-export function findById(id: number): Users | undefined {
-  return db.select().from(users).where(eq(users.id, id)).get()
-}
+export const userRepository = {
+  findAll(): Users[] {
+    return db.select().from(users).orderBy(desc(users.createdAt)).all()
+  },
 
-export function findByEmail(email: string): Users | undefined {
-  return db.select().from(users).where(eq(users.email, email)).get()
-}
+  findById(id: number): Users | undefined {
+    return db.select().from(users).where(eq(users.id, id)).get()
+  },
 
-export function insert(dto: CreateUsersDto): Users {
-  return db.insert(users).values(dto).returning().get()!
-}
+  findByEmail(email: string): Users | undefined {
+    return db.select().from(users).where(eq(users.email, email)).get()
+  },
 
-export function update(id: number, dto: Partial<CreateUsersDto>): Users | undefined {
-  return db.update(users).set(dto).where(eq(users.id, id)).returning().get()
-}
+  insert(dto: CreateUsersDto): Users {
+    return db.insert(users).values(dto).returning().get()!
+  },
 
-export function remove(id: number): boolean {
-  const result = db.delete(users).where(eq(users.id, id)).returning().get()
-  return result != undefined;
-}
+  update(id: number, dto: Partial<CreateUsersDto>): Users | undefined {
+    return db.update(users).set(dto).where(eq(users.id, id)).returning().get()
+  },
 
-export async function updateLocale(userId: number, locale: string) {
+  remove(id: number): boolean {
+    const result = db.delete(users).where(eq(users.id, id)).returning().get()
+    return result != undefined;
+  },
+
+  updateUserRole(email: string, role: 'user' | 'staff' | 'admin') {
+    const user = db.select().from(users).where(eq(users.email, email)).get()
+    if (!user) throw new Error('User not found')
+
     return db.update(users)
-      .set({ locale })
-      .where(eq(users.id, userId))
-      .returning()
-      .get()
-  }
+      .set({ role })
+      .where(eq(users.email, email))
+  },
 
-export async function updateUserRole(email: string, role: 'user' | 'staff' | 'admin') {
-  const user = await db.select().from(users).where(eq(users.email, email)).get()
-  if (!user) throw new Error('User not found')
-  
-  return db.update(users)
-    .set({ role })
-    .where(eq(users.email, email))
 }

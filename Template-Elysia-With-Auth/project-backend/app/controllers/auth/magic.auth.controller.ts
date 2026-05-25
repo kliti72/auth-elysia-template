@@ -4,12 +4,11 @@ import { magicLinksService } from '../../services/auth/magic.service'
 import { sessionsService } from '../../services/auth/sessions.service'
 import { usersService } from '../../services/auth/users.service'
 
-export const MagicAuthController = new Elysia({ prefix: '/auth/magic' })
+export const magicAuthController = new Elysia({ prefix: '/auth/magic' })
 
   .post('/send', async ({ body }) => {
     const { email } = body
     await magicLinksService.send(email)
-    // Risposta vaga per sicurezza — non riveli se l'email esiste o no
     return { success: true, message: 'Se la mail esiste, riceverai il link' }
   }, {
     body: t.Object({ email: t.String({ format: 'email' }) })
@@ -28,7 +27,6 @@ export const MagicAuthController = new Elysia({ prefix: '/auth/magic' })
 
     const session = await sessionsService.createMagicLinkSession(user)
 
-    // stesso pattern Google — cookie + redirect alla callback page
     return new Response(null, {
       status: 302,
       headers: {

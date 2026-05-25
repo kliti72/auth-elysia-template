@@ -1,6 +1,3 @@
-// NOT EDIT MUCH THIS FILE, USE ONLY WITH Elysia-cli
-// https://github.com/kliti72/elysia-cli
-
 import { sqliteTable, integer, text, check } from 'drizzle-orm/sqlite-core'
 import { relations } from 'drizzle-orm'
 import { sql } from 'drizzle-orm'
@@ -32,9 +29,6 @@ export const magicLinks = sqliteTable('magic_links', {
   createdAt: text('created_at').notNull().default(sql`(datetime('now'))`),
 })
 
-// ═══════════════════════════════════
-// sessions
-// ═══════════════════════════════════
 export const sessions = sqliteTable('sessions', {
   id: text('id').primaryKey(),
   userId: integer('user_id')
@@ -46,11 +40,9 @@ export const sessions = sqliteTable('sessions', {
   isValid: integer('is_valid', { mode: 'boolean' }).notNull().default(true),
 })
 
-// Relations — drizzle le vuole esplicite frat
 export const usersRelations = relations(users, ({ many }) => ({
   sessions:    many(sessions),
 }))
-
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
   user: one(users, {

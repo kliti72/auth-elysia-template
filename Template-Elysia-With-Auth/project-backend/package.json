@@ -5,16 +5,7 @@
   "scripts": {
     "dev": "bun run --watch index.ts",
     "studio": "bunx drizzle-kit studio",
-    "push": "bunx drizzle-kit push",
-    "migrate:role": "bun run scripts/migrate-add-role.ts",
-    "migrate:collectionView": "bun run scripts/migrate-add-collection-views.ts",
-    "migrate:posts": "bun run scripts/migrate-add-posts.ts",
-    "blog:generate": "bun run scripts/blog-gen/generate.ts",
-    "blog:generate:all": "bun run scripts/blog-gen/generate.ts --all",
-    "blog:validate": "bun run scripts/blog-gen/validate.ts",
-    "blog:seed": "bun run scripts/blog-gen/seed.ts",
-    "blog:seed:dry": "bun run scripts/blog-gen/seed.ts --dry",
-    "blog:pipeline": "bun run blog:generate && bun run blog:validate && bun run blog:seed"
+    "push": "bunx drizzle-kit push"
   },
   "private": true,
   "devDependencies": {
