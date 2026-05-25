@@ -1,14 +1,8 @@
-// sessions.controller.ts
-
 import { Elysia, t } from 'elysia'
 import { sessionsService } from '../../services/auth/sessions.service'
 import { usersService } from '../../services/auth/users.service'
 
 export const sessionsController = new Elysia({ prefix: '/auth/session' })
-
-  .get('/get', () => {
-    return sessionsService.getAll()
-  })
 
   .get('/', async ({ cookie, set }) => {
     const accessToken = cookie.sessionAccessToken.value
@@ -38,7 +32,7 @@ export const sessionsController = new Elysia({ prefix: '/auth/session' })
       return { error: 'User not found' }
     }
 
-    return { user, accessToken: session.accessToken } // ← unica modifica
+    return user 
   }, {
     cookie: t.Cookie({
       sessionAccessToken: t.String()

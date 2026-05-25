@@ -1,16 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../context/AuthContext";
 import { useLang } from "../context/LangContext";
 
-/* ─── PAGE ───────────────────────────────────────────────── */
 export default function MePage() {
   const router = useRouter();
   const { status, user } = useAuth();
 
-  // guard — redirect se non autenticato
   if (status === "unauthenticated") { router.replace("/auth"); return null; }
   if (status === "loading") return (
     <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
@@ -18,23 +15,12 @@ export default function MePage() {
     </div>
   );
 
-  // da qui status === "authenticated" — user è sempre User, mai null
   const lang = useLang();
 
   return (
     <>
-      <style>{`
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        .poem-card, .collection-card { animation: fadeUp 0.5s ease forwards; opacity: 0; }
-      `}</style>
-
       <div className="min-h-screen  bg-[#0a0a0a]/75">
         <main className="max-w-5xl mx-auto px-4 py-8">
-
-          {/* ── PROFILO ── */}
           <section className="mb-12">
             <div className="flex items-start gap-5 mb-8">
               <div

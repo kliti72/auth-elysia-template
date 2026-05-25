@@ -1,8 +1,8 @@
-const BASE = process.env.NEXT_PUBLIC_API_URL
+import { CONFIG_APP } from "@/app/config/envorinemt"
 
 export const apiFetch = async <T>(path: string, options?: RequestInit): Promise<T> => {
-  const res = await fetch(`${BASE}${path}`, {
-    credentials: 'include', // manda i cookie automaticamente — sessionAccessToken
+  const res = await fetch(`${CONFIG_APP.HOST_API_URL}/${path}`, {
+    credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
     ...options,
   })

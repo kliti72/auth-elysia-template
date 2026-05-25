@@ -1,20 +1,20 @@
 import type { CreateUsersDto, Users } from "../../types/auth/users.types"
-import * as usersRepository from "../../repositories/auth/users.repository"
+import { userRepository } from "../../repositories/auth/users.repository"
 
 export const usersService = {
 
   getAll() {
-    return usersRepository.findAll()
+    return userRepository.findAll()
   },
 
   getById(id: number) {
-    const item = usersRepository.findById(id)
+    const item = userRepository.findById(id)
     if (!item) throw new Error(`Users ${id} not found.`)
     return item
   },
 
   getByEmail(email: string) {
-    const item = usersRepository.findByEmail(email);
+    const item = userRepository.findByEmail(email);
     return item
   },
 
@@ -29,7 +29,7 @@ export const usersService = {
     const suffix = Math.random().toString(36).slice(2, 6) // 4 chars random
     dto.handle = `${base}-${suffix}`         // → "marco-x7k2"
 
-    return usersRepository.insert(dto)
+    return userRepository.insert(dto)
   },
 
   createFromEmail(email: string) {
@@ -44,31 +44,31 @@ export const usersService = {
       picture: '',
       locale: '',
     }
-    return usersRepository.insert(dto)
+    return userRepository.insert(dto)
   },
 
   update(id: number, dto: Partial<CreateUsersDto>) {
-    const updated = usersRepository.update(id, dto)
+    const updated = userRepository.update(id, dto)
     if (!updated) throw new Error(`Users ${id} not found.`)
     return updated
   },
 
   delete(id: number) {
-    const deleted = usersRepository.remove(id)
+    const deleted = userRepository.remove(id)
     if (!deleted) throw new Error(`Users ${id} not found.`)
     return { ok: true }
   },
 
   verifyEmail(id: number) {
-    const user = usersRepository.findById(id)
+    const user = userRepository.findById(id)
     if (!user) throw new Error(`Users ${id} not found.`)
-    return usersRepository.update(id, { verifiedEmail: true })
+    return userRepository.update(id, { verifiedEmail: true })
   },
 
   updateUserData(id: number, data: Partial<Pick<Users, 'name' | 'givenName'>>) {
-    const user = usersRepository.findById(id)
+    const user = userRepository.findById(id)
     if (!user) throw new Error(`Users ${id} not found.`)
-    return usersRepository.update(id, data)
+    return userRepository.update(id, data)
   },
 
 }

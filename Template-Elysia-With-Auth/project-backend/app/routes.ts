@@ -20,7 +20,7 @@ export const routes: RouteConfig[] = [
   },
   {
     controller: googleAuthController,
-    enabled: false,
+    enabled: true,
     middleware: [],
   },
   {

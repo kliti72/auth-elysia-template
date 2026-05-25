@@ -1,11 +1,8 @@
-// lib/services/GoogleAuthService.ts
 
-
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
+import { CONFIG_APP } from "@/app/config/envorinemt";
 
 export const GoogleAuthService = {
-  /** Redirecta il browser al backend — Google fa il resto */
   login(): void {
-    window.location.href = `${API}/auth/google`;
+    window.location.href = `${CONFIG_APP.HOST_API_URL}/auth/google`;
   },
 };

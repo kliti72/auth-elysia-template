@@ -1,8 +1,9 @@
-// src/modules/auth/magic.controller.ts
 import { Elysia, t } from 'elysia'
 import { magicLinksService } from '../../services/auth/magic.service'
 import { sessionsService } from '../../services/auth/sessions.service'
 import { usersService } from '../../services/auth/users.service'
+
+import { CONFIG } from '../../config/env'
 
 export const magicAuthController = new Elysia({ prefix: '/auth/magic' })
 
@@ -30,7 +31,7 @@ export const magicAuthController = new Elysia({ prefix: '/auth/magic' })
     return new Response(null, {
       status: 302,
       headers: {
-        "Location": `${Bun.env.APP_URL}/auth/callback`,
+        "Location": `${CONFIG.app_url}/auth/callback`,
         "Set-Cookie": `sessionAccessToken=${session.accessToken}; HttpOnly; Path=/; SameSite=Lax; Max-Age=604800`
       }
     })

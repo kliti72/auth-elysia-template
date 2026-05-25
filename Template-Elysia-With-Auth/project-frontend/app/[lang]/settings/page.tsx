@@ -6,9 +6,8 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/[lang]/context/AuthContext";
 import Link from "next/link";
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
+import { CONFIG_APP } from "@/app/config/envorinemt";
 
-/* ─── ANONYMOUS DROPDOWN ─────────────────────────────────── */
 function AnonymousToggle({
   value,
   onChange,
@@ -108,7 +107,6 @@ function AnonymousToggle({
   );
 }
 
-/* ─── PAGE ───────────────────────────────────────────────── */
 export default function EditProfilePage() {
   const { user, setUser, status, logout } = useAuth();
   const router = useRouter();
@@ -127,7 +125,6 @@ export default function EditProfilePage() {
       setName(user.name);
       setGivenName(user.givenName);
       setBio(user.bio ?? "");
-      setIsAnonymous(user.isAnonymous ?? false);
     }
   }, [user, status]);
 
@@ -136,7 +133,7 @@ export default function EditProfilePage() {
     setError(null);
     setSaved(false);
     try {
-      const res = await fetch(`${API}/users/me`, {
+      const res = await fetch(`${CONFIG_APP}/users/me`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

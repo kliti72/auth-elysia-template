@@ -1,68 +1,33 @@
-// app/auth/callback/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/[lang]/context/AuthContext";
-
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
+import { CONFIG_APP } from "@/app/config/envorinemt";
 
 export default function CallbackPage() {
   const router = useRouter();
   const { setUser } = useAuth();
   const [mounted, setMounted] = useState(false);
 
-  // Fix hydration: aspetta che siamo lato client
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
     if (!mounted) return;
 
-    console.log("[Callback] 🚀 Avvio fetch sessione...");
-    console.log("[Callback] 🌐 API URL →", API);
-
-    fetch(`${API}/auth/session`, { credentials: "include" })
+    fetch(`${CONFIG_APP.HOST_API_URL}/auth/session`, { credentials: "include" })
       .then(res => {
-        console.log("[Callback] 📡 Response status →", res.status);
-
-        if (!res.ok) {
-          console.error("[Callback] ❌ Session non valida — status:", res.status);
-          throw new Error("Session non valida");
-        }
+        if (!res.ok) throw new Error("Errore /auth/session");
         return res.json();
       })
-      .then(data => {
-        console.log("[Callback] ✅ Data ricevuta →", data);
-
-        const { user, accessToken } = data;
-
-        if (!user) {
-          console.error("[Callback] ❌ User mancante nel payload");
-          throw new Error("User mancante");
-        }
-
-        if (!accessToken) {
-          console.warn("[Callback] ⚠️ accessToken mancante — controlla il backend");
-        }
-
-        console.log("[Callback] 👤 User →", user);
-        console.log("[Callback] 🔑 AccessToken →", accessToken ? "presente" : "MANCANTE");
-
-        setUser(user, accessToken);
-
-        console.log("[Callback] ➡️ Redirect verso /me");
+      .then(({ user }) => {
+        if (!user) throw new Error("User mancante");
+        setUser(user);
         router.replace("/me");
       })
-      .catch(err => {
-        console.error("[Callback] 💥 Errore catch →", err.message);
-        console.warn("[Callback] ↩️ Redirect verso /auth");
-        router.replace("/auth");
-      });
+      .catch(() => router.replace("/auth"));
   }, [mounted]);
 
-  // Evita mismatch SSR/client — render vuoto finché non siamo montati
   if (!mounted) return null;
 
   return (

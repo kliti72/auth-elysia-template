@@ -1,75 +1,53 @@
-// lib/auth/AuthContext.tsx
 "use client";
 
 import {
   createContext,
-  useCallback,
   useContext,
+  useCallback,
   useEffect,
   useState,
   type ReactNode,
 } from "react";
-import { GoogleAuthService } from "../services/GoogleAuthServices";
+
 import type { AuthContextValue, AuthState, User } from "../types/auth";
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
-const TOKEN_KEY = "versify_access_token";
+import { CONFIG_APP } from "@/app/config/envorinemt";
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AuthState>({
-    status: "loading", // loading finché non controlliamo il token salvato
+    status: "loading",
     user: null,
     error: null,
   });
 
-  /* ── REIDRATA AL MOUNT ── */
-useEffect(() => {
-  const token = localStorage.getItem(TOKEN_KEY);
-  if (!token) {
-    setState({ status: "unauthenticated", user: null, error: null });
-    return;
-  }
-
-  // il cookie httpOnly viene mandato automaticamente — credentials: include
-  fetch(`${API}/auth/session`, {
-    credentials: "include", // ← solo questo, niente Authorization header
-  })
-    .then(res => {
-      if (!res.ok) throw new Error("Session non valida");
-      return res.json();
+  useEffect(() => {
+    fetch(`${CONFIG_APP.HOST_API_URL}/auth/session`, {
+      credentials: "include",
     })
-    .then(({ user, accessToken }) => { // ← destruttura correttamente
-      console.log("[AuthContext] Reidratato →", user);
-      setState({ status: "authenticated", user, error: null });
-      localStorage.setItem(TOKEN_KEY, accessToken); // aggiorna token
-    })
-    .catch(() => {
-      localStorage.removeItem(TOKEN_KEY);
-      setState({ status: "unauthenticated", user: null, error: null });
-    });
-}, []);
+      .then(res => {
+        if (!res.ok) throw new Error()
+        return res.json()
+      })
+      .then(({ user }) => {
+        setState({ status: "authenticated", user, error: null })
+      })
+      .catch(() => {
+        setState({ status: "unauthenticated", user: null, error: null })
+      })
+  }, [])
 
-  /* ── GOOGLE LOGIN ── */
-  const loginWithGoogle = useCallback((): void => {
-    GoogleAuthService.login();
-  }, []);
-
-  /* ── SET USER + SALVA TOKEN ── */
-  const setUser = useCallback((user: User, accessToken: string): void => {
-    localStorage.setItem(TOKEN_KEY, accessToken);
+  const setUser = useCallback((user: User): void => {
     setState({ status: "authenticated", user, error: null });
   }, []);
 
-  /* ── LOGOUT ── */
   const logout = useCallback((): void => {
-    localStorage.removeItem(TOKEN_KEY);
     setState({ status: "unauthenticated", user: null, error: null });
   }, []);
 
   return (
-    <AuthContext.Provider value={{ ...state, loginWithGoogle, setUser, logout }}>
+    <AuthContext.Provider value={{ ...state, setUser, logout }}>
       {children}
     </AuthContext.Provider>
   );

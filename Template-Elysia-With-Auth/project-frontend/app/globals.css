@@ -5,12 +5,6 @@
   --foreground: #171717;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -22,5 +16,29 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+
+/* Auth Page */
+@keyframes twinkle {
+          0%,100% { opacity:0.1; }
+          50%      { opacity:0.8; }
+        }
+        @keyframes fadeUp {
+          from { opacity:0; transform:translateY(16px); }
+          to   { opacity:1; transform:translateY(0); }
+        }
+        .fu  { animation: fadeUp 0.5s ease forwards; }
+        .fu1 { animation: fadeUp 0.5s 0.08s ease forwards; opacity:0; }
+        .fu2 { animation: fadeUp 0.5s 0.16s ease forwards; opacity:0; }
+        .fu3 { animation: fadeUp 0.5s 0.24s ease forwards; opacity:0; }
+        .inp {
+          background:#111; border:1px solid rgba(255,255,255,0.07);
+          border-radius:10px; padding:11px 14px; color:white;
+          font-size:13px; width:100%; outline:none;
+          transition:border-color 0.2s;
+        }
+        .inp:focus  { border-color:rgba(139,124,246,0.5); }
+        .inp.error  { border-color:rgba(255,80,80,0.4); }
+        .inp::placeholder { color:#3a3a3a; } 

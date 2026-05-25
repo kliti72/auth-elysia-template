@@ -12,8 +12,8 @@ export const CONFIG = {
   app_url: optional('APP_URL', 'http://hokiapp.it/'),
 
   server: {
-    port:     IS_PROD ? Number(optional('PORT', '5000')) : Number(optional('PORT', '3000')),
-    hostname: optional('HOST_URL', '0.0.0.0'),
+    port:      optional('PORT', '5000'),
+    hostname: optional('HOST', '0.0.0.0'),
   },
 
   database: {
