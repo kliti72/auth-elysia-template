@@ -4,6 +4,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { LangProvider } from "./context/LangContext";
 
 import { DEFAULT_LOCALE, Locale, LOCALES } from "./i18n/translations";
+import Header from "./component/header";
 
 export default async function LangLayout({
   children,
@@ -19,6 +20,7 @@ export default async function LangLayout({
     <Providers>
       <AuthProvider>
             <LangProvider lang={locale}>
+              <Header />
               <main>
                 {children}
               </main>
