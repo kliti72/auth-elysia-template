@@ -1,6 +1,7 @@
 # === DATABASE ===
 backend/poetic-api/app.db
 backend/poetic-api/config/database/
+app/config/keys/*
 
 # === DEPENDENCIES ===
 node_modules/
