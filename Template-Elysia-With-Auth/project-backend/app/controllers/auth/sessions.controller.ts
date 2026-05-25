@@ -7,6 +7,7 @@ export const sessionsController = new Elysia({ prefix: '/auth/session' })
   .get('/', async ({ cookie, set }) => {
     const accessToken = cookie.sessionAccessToken.value
 
+    console.log("Sessione richiesta per token", accessToken);
     if (!accessToken) {
       set.status = 401 
       return { error: 'No session cookie found' }
@@ -31,8 +32,7 @@ export const sessionsController = new Elysia({ prefix: '/auth/session' })
       set.status = 404
       return { error: 'User not found' }
     }
-
-    return user 
+    return { user };
   }, {
     cookie: t.Cookie({
       sessionAccessToken: t.String()

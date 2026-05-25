@@ -4,58 +4,47 @@ import Link from "next/link";
 import { getT } from "../i18n/translations";
 
 import { useAuth } from "../context/AuthContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLang } from "../context/LangContext";
 
-import { GoogleAuthService } from "../services/GoogleAuthServices";
 
 import { CONFIG_APP } from "@/app/config/envorinemt";
+import { apiFetch } from "../services/api/fetch";
+import { useRouter } from "next/navigation";
 
 export default function AuthPage() {
   const lang = useLang();
   const tr = getT(lang);
 
+  const user = useAuth();
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState("");
 
-
   const handleMagicLink = async () => {
+
     if (!email.trim()) return;
     setLoading(true);
-    setError("");
-    try {
-      const res = await fetch(`${CONFIG_APP.HOST_API_URL}/auth/magic/send`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ email: email.trim() }),
-      });
 
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        throw new Error(body?.message ?? "Errore invio");
-      }
-
-      setSent(true);
-    } catch (e) {
-      console.error("[magic link]", e);
-    } finally {
-      setLoading(false);
-    }
+    await apiFetch(`auth/magic/send`, {
+      method: "POST",
+      body: JSON.stringify({ email: email.trim() }),  
+    });
+    
+    setSent(true);
+    setLoading(false);
   };
 
-  /* ── GOOGLE ── */
   const handleGoogle = async () => {
-    setGoogleLoading(true);
-    try {
-      await GoogleAuthService.login()
-    } finally {
-      setGoogleLoading(false);
-    }
+      window.location.href = `${CONFIG_APP.HOST_API_URL}/auth/google`;
   };
+
+  useEffect(() => {
+    if (user.status === 'authenticated') router.replace("/");
+  }, [user]);
 
   return (
     <>
@@ -63,7 +52,7 @@ export default function AuthPage() {
         <div className="text-center mb-6 fu">
           <Link href={`/${lang}`} aria-label="Name-APP home">
             <h1 className="text-2xl tracking-[0.15em] text-white" >
-              Name-APP
+              {tr.name_app}
             </h1>
           </Link>
         </div>
@@ -71,7 +60,6 @@ export default function AuthPage() {
         {!sent ? (
           <>
             <p className="fu1 text-xs text-[#555] mb-5 leading-relaxed">{tr.auth_sub}</p>
-            {/* GOOGLE */}
             <button
               onClick={handleGoogle}
               disabled={googleLoading}
@@ -90,7 +78,7 @@ export default function AuthPage() {
               {tr.google}
             </button>
 
-            {/* MAGIC LINK */}
+  
             <div className="fu2 flex flex-col gap-2.5">
               <label htmlFor="email" className="sr-only">{tr.email}</label>
               <input
@@ -105,8 +93,6 @@ export default function AuthPage() {
                 aria-required="true"
                 disabled={loading}
               />
-
-              {/* ERROR */}
               {error && (
                 <p className="text-[10px] text-red-400/70 leading-relaxed">{error}</p>
               )}
@@ -123,7 +109,7 @@ export default function AuthPage() {
               <p className="text-[10px] text-[#383838] text-center leading-relaxed">{tr.magic_hint}</p>
             </div>
 
-            {/* TERMS */}
+
             <p className="fu3 text-[9px] text-[#2e2e2e] text-center mt-5 leading-relaxed">
               {tr.terms_hint}{" "}
               <Link href={`/${lang}/terms`} className="text-[#3a3a3a] hover:text-white transition-colors">{tr.terms}</Link>
@@ -132,7 +118,7 @@ export default function AuthPage() {
             </p>
           </>
         ) : (
-          /* SENT STATE */
+     
           <div className="text-center flex flex-col items-center gap-4 py-2">
             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#8b7cf6] to-[#4ade80] flex items-center justify-center text-xl">
               ✉

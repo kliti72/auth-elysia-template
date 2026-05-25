@@ -17,6 +17,7 @@ export default function CallbackPage() {
 
     fetch(`${CONFIG_APP.HOST_API_URL}/auth/session`, { credentials: "include" })
       .then(res => {
+            console.log("[Callback] status:", res.status);
         if (!res.ok) throw new Error("Errore /auth/session");
         return res.json();
       })
@@ -27,8 +28,6 @@ export default function CallbackPage() {
       })
       .catch(() => router.replace("/auth"));
   }, [mounted]);
-
-  if (!mounted) return null;
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">

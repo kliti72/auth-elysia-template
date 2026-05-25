@@ -5,6 +5,7 @@ export const DEFAULT_LOCALE: Locale = "it";
 export const translations = {
   it: {
     "app_name" : "AppName",
+    "app_domain" : ".com",
     "auth_sub": "Accedi con Google o ricevi un link magico via email per entrare senza password.",
     "google": "Continua con Google",
     "or": "oppure",

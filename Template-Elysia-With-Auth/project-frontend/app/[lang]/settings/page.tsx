@@ -142,7 +142,7 @@ export default function EditProfilePage() {
       if (!res.ok) throw new Error("Errore salvataggio");
       const updated = await res.json();
       const token = localStorage.getItem("versify_access_token")!;
-      setUser(updated, token);
+      setUser(updated);
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch {

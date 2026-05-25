@@ -24,5 +24,3 @@ export interface User {
   bio: string;
   role: string;
 }
-
-
