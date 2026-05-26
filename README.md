@@ -1,6 +1,6 @@
 # auth-elysia-template
 
-Full-stack authentication template built with Elysia (Bun), Next.js, Drizzle ORM, and SQLite. Includes Google OAuth, Magic Link login, email verification, session management, and role-based access control. Comes with a GitHub Actions auto-deploy workflow for VPS deployment.
+Full-stack authentication template built with Elysia (Bun), Next.js, Drizzle ORM, and SQLite. Includes Google OAuth, Magic Link login, email verification (to do), session management, and role-based access control. Comes with a GitHub Actions auto-deploy workflow.
 
 ---
 
@@ -108,11 +108,11 @@ Template-Elysia-With-Auth/
 ├── project-frontend/
 │   ├── app/
 │   │   ├── layout.tsx
-│   │   ├── provider.tsx                # TanStack Query provider
-│   │   ├── middleware.ts               # Next.js middleware (auth guard)
-│   │   └── [lang]/                     # i18n routing
+│   │   ├── provider.tsx                
+│   │   ├── middleware.ts               
+│   │   └── [lang]/                     
 │   │       ├── layout.tsx
-│   │       ├── page.tsx                # home
+│   │       ├── page.tsx                
 │   │       ├── auth/
 │   │       │   ├── page.tsx            # login page
 │   │       │   └── callback/page.tsx   # OAuth callback handler
@@ -125,7 +125,6 @@ Template-Elysia-With-Auth/
 │   │       │   ├── useAdmin.ts
 │   │       │   └── useLang.ts
 │   │       ├── services/
-│   │       │   ├── GoogleAuthServices.tsx
 │   │       │   ├── LangService.ts
 │   │       │   └── api/fetch.ts
 │   │       ├── i18n/
@@ -181,19 +180,26 @@ cp .env.example .env
 Edit `.env`:
 
 ```env
-NODE_ENV=development
-PORT=3000
-DB_PATH=./config/database/app.db
 
-// or add keys on /config/keys/google_key.json (change this)
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-GOOGLE_REDIRECT_URI=http://localhost:3000/auth/google/callback
+`Add you Google OAuth Keys on: 
+/config/keys/google_key.json (change this)`
 
-SMTP_HOST=your_smtp_host
+NODE_ENV='DEV'
+SCEHMA_PATH='./database/schema.ts'
+PATH_DB='./database/storage/store.db'
+HOST='localhost'
+PORT='4040'
+HOST_URL='http://localhost:4040'
+APP_URL='http://localhost:3001'
+
+# Config Email
+SMTP_HOST=ssl0.ovh.net
 SMTP_PORT=587
-SMTP_USER=your_email@example.com
-SMTP_PASS=your_smtp_password
+SMTP_USER=noreply@versify.art
+SMTP_PASS=##############
+SMTP_FROM=noreply@versify.art
+
+for read this config, use app/config/env.ts
 ```
 
 Sync the database schema and start the dev server:
@@ -203,90 +209,13 @@ bun run push    # sync Drizzle schema to SQLite
 bun run dev     # start with hot reload
 ```
 
-Backend runs at: `http://localhost:3000`
-
-### 3. Frontend setup
-
-```bash
-cd ../project-frontend
-bun install
-bun run dev     # starts on port 3001
-```
-
-Frontend runs at: `http://localhost:3001`
-
----
-
-## Backend Scripts
-
-| Command | Description |
-|---|---|
-| `bun run dev` | Start with hot reload |
-| `bun run push` | Sync Drizzle schema to database |
-| `bun run studio` | Open Drizzle Studio at https://local.drizzle.studio |
-
-## Frontend Scripts
-
-| Command | Description |
-|---|---|
-| `bun run dev` | Start dev server on port 3001 |
-| `bun run build` | Build for production |
-| `bun run start` | Start production server |
-| `bun run lint` | Run ESLint |
-
----
-
-## Routes
-
-### Authentication
-
-| Method | Path | Description | Auth Required |
-|---|---|---|---|
-| GET | `/auth/google` | Initiate Google OAuth flow | No |
-| GET | `/auth/google/callback` | Google OAuth callback | No |
-| POST | `/auth/magic` | Request magic link | No |
-| GET | `/auth/magic/verify` | Verify magic link token | No |
-| GET | `/auth/verify-email` | Verify email address | No |
-| POST | `/auth/login` | Email/password login | No |
-| POST | `/auth/logout` | Invalidate session | Yes |
-
-### Users & Sessions
-
-| Method | Path | Description | Auth Required |
-|---|---|---|---|
-| GET | `/users/me` | Get current user | Yes |
-| PATCH | `/users/profile` | Update profile | Yes |
-| GET | `/sessions` | List active sessions | Yes |
-| DELETE | `/sessions/:id` | Revoke a session | Yes |
-
-### Admin
-
-| Method | Path | Description | Auth Required |
-|---|---|---|---|
-| GET | `/admin/users` | List all users | Yes (admin role) |
-
----
-
-## Role-Based Access Control
-
-Users have one of three roles: `user`, `staff`, or `admin`.
-
-The `authMiddleware` protects routes that require authentication. Admin routes additionally check that the session user has the `admin` role.
-
-```typescript
-// app/routes.ts
-{
-  controller: adminController,
-  enabled: true,
-  middleware: [authMiddleware],  // protected
-}
-```
-
----
 
 ## Adding a New Module
 
 Create the files following the naming convention:
+Create your table in "project-backend/app/database/schema.json"
+
+// Create the MVC
 
 ```
 app/controllers/messages.controller.ts
@@ -308,6 +237,57 @@ export const routes: RouteConfig[] = [
   },
 ]
 ```
+
+
+Backend runs at: `http://localhost:4040`
+
+### 3. Frontend setup
+
+```bash
+cd ../project-frontend
+bun install
+bun run dev    
+```
+
+Edit `.env`:
+
+```env
+
+NODE_ENV='DEV'
+HOST_API_URL="http://localhost:4040"
+
+for read this config, use app/config/env.ts
+```
+
+Frontend runs at: `http://localhost:3031`
+---
+
+### Authentication
+
+| Method | Path | Description | Auth Required |
+|---|---|---|---|
+| GET | `/auth/google` | Initiate Google OAuth flow | No |
+| GET | `/auth/google/callback` | Google OAuth callback | No |
+| POST | `/auth/magic` | Request magic link | No |
+| GET | `/auth/magic/verify` | Verify magic link token | No |
+| GET | `/auth/verify-email` | Verify email address | No |
+| POST | `/auth/login` | Email/password login | No |
+| POST | `/auth/logout` | Invalidate session | Yes |
+
+### Users & Sessions
+
+| Method | Path | Description | Auth Required |
+|---|---|---|---|
+| GET | `/users/me` | Get current user | Yes |
+| GET | `/sessions` | List active sessions | Yes |
+
+### Admin
+
+| Method | Path | Description | Auth Required |
+|---|---|---|---|
+| GET | `/admin/users` | List all users | Yes (admin role) |
+
+---
 
 Or use elysia-cli to generate everything automatically:
 
@@ -333,40 +313,9 @@ Update `drizzle.config.ts` dialect to `postgresql` and add `DATABASE_URL` to you
 
 ---
 
-## CI/CD — Auto Deploy to VPS
-
-A GitHub Actions workflow is included in `github-auto-deploy-template/workflows/deploy.yml`. On every push to `main` it SSHes into the VPS, pulls the latest code, rebuilds frontend and backend, and restarts the systemd services via Nginx.
-
-Required GitHub Secrets:
-
-| Secret | Description |
-|---|---|
-| `SSH_HOST` | VPS IP or hostname |
-| `SSH_PRIVATE_KEY` | Private SSH key for the deploy user |
-
----
-
 ## i18n
 
 The frontend uses Next.js dynamic `[lang]` routing for internationalization. Translations live in `app/[lang]/i18n/translations.ts`. The `LangContext` and `useLang` hook handle language switching at runtime.
-
----
-
-## Environment Variables Reference
-
-### Backend
-
-| Variable | Default | Description |
-|---|---|---|
-| `NODE_ENV` | `development` | `development` or `production` |
-| `PORT` | `3000` (dev) / `5000` (prod) | Server port |
-| `DB_PATH` | `./config/database/app.db` | SQLite file path |
-| `GOOGLE_CLIENT_ID` | — | Google OAuth client ID |
-| `GOOGLE_CLIENT_SECRET` | — | Google OAuth client secret |
-| `GOOGLE_REDIRECT_URI` | — | OAuth callback URL |
-| `SMTP_*` | — | SMTP credentials for email |
-
-In production the server binds to `0.0.0.0`. In development it binds to `localhost`.
 
 ---
 

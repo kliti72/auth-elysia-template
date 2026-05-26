@@ -1,5 +1,5 @@
-// src/services/email.service.ts
 import nodemailer from 'nodemailer'
+import  { CONFIG } from '../../config/env'
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -12,13 +12,14 @@ const transporter = nodemailer.createTransport({
 })
 
 export const emailService = {
+  
   sendMagicLink: async (email: string, token: string, type: 'login' | 'verify-email' = 'login') => {
-    const url = `${Bun.env.HOST_URL}/auth/magic/verify?token=${token}`
+    const url = `${CONFIG.host_url}/auth/magic/verify?token=${token}`
 
     await transporter.sendMail({
-      from: `"Versify" <${Bun.env.SMTP_FROM}>`, 
+      from: `${CONFIG.APP_NAME} <${CONFIG.SMTP_FROM}>`, 
       to: email,
-      subject: 'Your magic link to Versify',
+      subject: `Your magic link to ${CONFIG.APP_NAME}`,
       html: `
       <!DOCTYPE html>
       <html lang="en">
@@ -36,7 +37,7 @@ export const emailService = {
                 <!-- HEADER -->
                 <tr>
                   <td style="background:linear-gradient(135deg,#1a1a2e,#16213e);padding:24px 40px;text-align:center;border-bottom:1px solid #2e2e2e;">
-                    <h1 style="margin:0;font-size:28px;color:#ffffff;font-weight:normal;letter-spacing:2px;">Versify</h1>
+                    <h1 style="margin:0;font-size:28px;color:#ffffff;font-weight:normal;letter-spacing:2px;">${CONFIG.APP_NAME}</h1>
                     <p style="margin:4px 0 0 0;font-size:11px;color:#8b7cf6;letter-spacing:3px;text-transform:uppercase;">the poetry platform</p>
                   </td>
                 </tr>
@@ -49,7 +50,7 @@ export const emailService = {
 
                     <!-- CTA -->
                     <a href="${url}" style="display:inline-block;background:linear-gradient(135deg,#8b7cf6,#6d5ce7);color:#ffffff;text-decoration:none;padding:14px 44px;border-radius:8px;font-size:15px;letter-spacing:1px;font-family:sans-serif;">
-                      Sign in to Versify
+                      Sign in to ${CONFIG.APP_NAME}
                     </a>
                   </td>
                 </tr>

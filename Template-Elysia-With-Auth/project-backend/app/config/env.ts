@@ -7,9 +7,15 @@ function optional(key: string, fallback: string): string {
 
 export const CONFIG = {
 
+  APP_NAME: optional('APP_NAME', 'APP-NAME'),
   is_prod: IS_PROD, 
   host_url: optional('HOST_URL', 'http://0.0.0.0/'),
   app_url: optional('APP_URL', 'http://hokiapp.it/'),
+  SMTP_HOST: optional('SMTP_HOST', 'ssl0.ovh.net'),
+  SMTP_PORT: optional('SMTP_PORT', '587'),
+  SMTP_USER: optional('SMTP_USER', 'noreply@versify.art'),
+  SMTP_PASS: optional('SMTP_PASS', '******************'),
+  SMTP_FROM: optional('SMTP_FROM', 'noreply@versify.art'),
 
   server: {
     port:      optional('PORT', '5000'),

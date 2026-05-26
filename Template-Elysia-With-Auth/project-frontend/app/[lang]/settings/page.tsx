@@ -71,10 +71,9 @@ export default function SettingsPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]/75 flex flex-col items-center justify-center px-4 py-16">
-      <button onClick={() => router.back()} className="absolute top-5 left-5 text-[11px] text-[#444] hover:text-white transition-colors tracking-widest uppercase">← indietro</button>
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <h1 className="text-2xl text-white font-normal tracking-wide" style={{ fontFamily: "Georgia,serif" }}>Impostazioni</h1>
+          <h1 className="text-2xl text-white tracking-wide">Impostazioni</h1>
           <p className="text-xs text-[#555] mt-1">{user?.email}</p>
         </div>
         <div className="bg-[#111]/80 border border-white/[0.06] rounded-2xl p-6 flex flex-col gap-4">

@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next'
+import { CONFIG } from '../../project-backend/app/config/env'
 
 export default function robots(): MetadataRoute.Robots {
 
@@ -24,7 +25,7 @@ export default function robots(): MetadataRoute.Robots {
     ],
 
     // Molto importante per SEO: linka il sitemap
-    sitemap: `https://versify.art/sitemap.xml`,
+    sitemap: `https://${CONFIG.APP_NAME}.art/sitemap.xml`,
 
     // Opzionale: puoi aggiungere host se fai international SEO
     // host: baseUrl,

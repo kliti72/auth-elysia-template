@@ -6,6 +6,7 @@ export const translations = {
   it: {
     "app_name" : "AppName",
     "app_domain" : ".com",
+    // AUTH PAGE
     "auth_sub": "Accedi con Google o ricevi un link magico via email per entrare senza password.",
     "google": "Continua con Google",
     "or": "oppure",
@@ -19,7 +20,12 @@ export const translations = {
     "sent_title": "Controlla la tua email",
     "sent_sub": "Abbiamo inviato il link a",
     "sent_hint": "Clicca il link nell'email per accedere. Controlla anche la cartella spam.",
-    "resend": "← Usa un'altra email"
+    "resend": "← Usa un'altra email",
+    // noAuthWidget
+    "access_refused": "Accesso negato",
+    "auth_required" : "Devi essere autenticato per continuare.",
+    "login" : "Vai al Login →"
+
   },
 
   en: {

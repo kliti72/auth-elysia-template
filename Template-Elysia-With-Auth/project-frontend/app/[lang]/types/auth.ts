@@ -10,6 +10,8 @@ export type AuthContextValue = AuthState & {
   logout: () => void
 }
 
+// role: text('role', { enum: ['user', 'staff', 'admin'] }).notNull().default('user'), 
+
 export interface User {
   id: number;
   email: string;
@@ -22,5 +24,5 @@ export interface User {
   locale: string;
   createdAt: string;
   bio: string;
-  role: string;
+  role: "user" | "staff" | "admin";
 }

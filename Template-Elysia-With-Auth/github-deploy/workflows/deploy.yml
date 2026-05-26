@@ -1,4 +1,4 @@
-name: 🚀 Auto Deploy Versify
+name: 🚀 Auto Deploy App
 
 on:
   push:
@@ -16,15 +16,15 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
-          username: versify
+          username: User
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo "🚀 VERSIFY DEPLOY STARTED"
+            echo "🚀 App DEPLOY STARTED"
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
             echo "📦 Pulling latest code..."
-            cd /home/versify/poetic/
+            cd /home/App/poetic/
             git stash push --keep-index
             git pull origin main 2>&1 && echo "✅ Pull ok" || echo "❌ Pull fallito"
 
@@ -36,7 +36,7 @@ jobs:
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             echo "🔧 FRONTEND"
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            cd /home/versify/poetic/frontend/versifier/
+            cd /home/App/poetic/frontend/versifier/
             echo "📍 Path: $(pwd)"
             /usr/local/bin/bun install 2>&1 && echo "✅ Install ok" || echo "❌ Install fallito"
             /usr/local/bin/bun run build 2>&1 && echo "✅ Build ok" || echo "❌ Build fallita"
@@ -45,7 +45,7 @@ jobs:
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             echo "🔧 BACKEND"
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            cd /home/versify/poetic/backend/poetic-api/
+            cd /home/App/poetic/backend/poetic-api/
             echo "📍 Path: $(pwd)"
             /usr/local/bin/bun install 2>&1 && echo "✅ Install ok" || echo "❌ Install fallito"
 
@@ -55,11 +55,11 @@ jobs:
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             sudo systemctl daemon-reload && echo "✅ Daemon reload ok"
             sudo systemctl reload nginx && echo "✅ Nginx ok" || echo "❌ Nginx fallito"
-            sudo systemctl restart versify-api && echo "✅ API ok" || echo "❌ API fallita"
-            sudo systemctl restart versify-frontend && echo "✅ Frontend ok" || echo "❌ Frontend fallito"
+            sudo systemctl restart App-api && echo "✅ API ok" || echo "❌ API fallita"
+            sudo systemctl restart App-frontend && echo "✅ Frontend ok" || echo "❌ Frontend fallito"
 
             echo "" 
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo "✅ VERSIFY DEPLOYED 🚀"
+            echo "✅ App DEPLOYED 🚀"
             echo "siamo in alto fratello 💪"
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

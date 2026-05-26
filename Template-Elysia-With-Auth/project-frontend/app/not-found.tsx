@@ -1,8 +1,9 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
+import { CONFIG } from '../../project-backend/app/config/env'
 
 export const metadata: Metadata = {
-  title: '404 – Pagina non trovata | Versify',
+  title: `404 – Pagina non trovata | ${CONFIG.APP_NAME}`,
   description: 'La pagina che stai cercando non esiste o è stata spostata.',
   robots: { index: false, follow: false },
 }
