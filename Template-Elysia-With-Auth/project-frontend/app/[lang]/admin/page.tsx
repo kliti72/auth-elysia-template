@@ -25,7 +25,7 @@ export default function Admin() {
     return <NotAuthWidget />
   }
 
-  if (user.status === "authenticated" && user.user.role === "staff") {
+  if (user.status === "authenticated" && user.user.role != "staff" || user.user.role != "admin" ) {
     return (
       <div>
         <NotAuthWidget />
